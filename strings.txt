@@ -19,7 +19,7 @@ INFO
 	EN	 [Info]
 
 ANALOG_DIGITAL
-	EN	Analog + Digital
+	EN	Analog / Digital
 
 USB1_DAC_NO_HUB
 	EN	Use with 44/48kHz no-hub workaround
