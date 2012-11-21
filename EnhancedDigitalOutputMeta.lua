@@ -37,7 +37,7 @@ end
 
 function defaultSettings(self)
 	return {
-		playbackDevice = "default",
+		playbackDevice = "MID",
 		bufferTime = 20000,
 		periodCount = 2,
 		firstUse = true
@@ -55,7 +55,7 @@ function registerApplet(meta)
 	if not updating and newbinary then
 		log:info("installing modified jive_alsa")
 		newbinary:close()
-		os.execute("mv /opt/squeezeplay/share/jive/applets/EnhancedDigitalOutput/jive_alsa /usr/bin/jive_alsa")
+		os.execute("mv /opt/squeezeplay/share/jive/applets/EnhancedDigitalOutput/jive_alsa /opt/squeezeplay/bin/jive_alsa")
 		os.execute("chmod 755 /opt/squeezeplay/bin/jive_alsa")
 	end
 
@@ -63,7 +63,7 @@ function registerApplet(meta)
 	-- check output device is available else bring up popup and restart if output attaches
 	local playbackDeviceFound = true
 
-	if not updating and settings.playbackDevice != "default" then
+	if not updating and settings.playbackDevice != "MID" then
 
 		local fh = io.open("/proc/asound/" .. settings.playbackDevice)
 		if fh == nil then
@@ -110,7 +110,10 @@ function registerApplet(meta)
 	if not updating and playbackDeviceFound then
 
 		-- init the decoder with our settings - we are loaded earlier than SqueezeboxFab4, decode:open ignores reopen
-		local playbackDevice = (settings.playbackDevice != "default" and "hw:CARD=" or "") .. settings.playbackDevice
+		local playbackDevice = "hw:CARD=" .. settings.playbackDevice
+        --if settings.playbackDevice == "MID" then
+        --    playbackDevice = "default"
+        --end          
 		log:info("playbackDevice: ", playbackDevice, " bufferTime: ", settings.bufferTime, " periodCount: ", settings.periodCount)
 		Decode:open({
 			alsaPlaybackDevice = playbackDevice,

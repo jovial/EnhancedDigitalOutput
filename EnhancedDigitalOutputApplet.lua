@@ -52,22 +52,22 @@ function deviceMenu(self, menuItem, firstUse)
 		
 		local items = {}
 
-		if curr == "default" then
-			if not firstUse then
-				items[#items+1] = {
-					text = tostring(self:string("ANALOG_DIGITAL")) .. tostring(self:string("CURRENT")),
-				}
-			end
-		else
-			items[#items+1] = {
-				text = self:string("ANALOG_DIGITAL"),
-				sound = "WINDOWSHOW",
-				callback = function(event, menuItem)
-							   timer:stop()
-							   self:_setCardAndReboot("default", false)
-						   end,
-			}
-		end
+		--if curr == "default" then
+			--if not firstUse then
+				--items[#items+1] = {
+					--text = tostring(self:string("ANALOG_DIGITAL")) .. tostring(self:string("CURRENT")),
+				--}
+			--end
+		--else
+			--items[#items+1] = {
+				--text = self:string("ANALOG_DIGITAL"),
+				--sound = "WINDOWSHOW",
+				--callback = function(event, menuItem)
+					--		   timer:stop()
+						--	   self:_setCardAndReboot("default", false)
+						  -- end,
+			--}
+		--end
 		
 		for num, card in ipairs(info) do
 			if curr != card.id then
@@ -102,10 +102,10 @@ function deviceMenu(self, menuItem, firstUse)
 								   end
 							   end,
 				}
-			--elseif card.id == "TXRX" then
-			--	items[#items+1] = {
-			--		text = card.desc .. tostring(self:string("CURRENT")),
-			--	}
+			elseif card.id == "MID" then
+				items[#items+1] = {
+					text = card.desc .. tostring(self:string("CURRENT")),
+				}
 			else
 				items[#items+1] = {
 					text = card.desc .. tostring(self:string("INFO")),
@@ -304,7 +304,7 @@ function _parseStreamInfo(self, card)
 		local chan = parse("    Channels: (%w+)")
 		local type = parse("    Endpoint: %d+ %w+ %((%w+)%)")
 		local rate = parse("    Rates: (.*)")
-		local int  = parse("    Data packet interval: (.*)")
+		local int  = parse("    Data packet interval: (.*)") or 'unknown'
 		skip(2)
 
 		fmts[#fmts+1] = { intf = intf, alt = alt, fmt = fmt, chan = chan, type = type, rate = rate, int = int }
@@ -380,7 +380,7 @@ function _showStats(self, card, desc)
 							entry("Rates: " .. info.fmt.rate)
 							entry("Feedback Format: " .. ((info.feedbkfmt == "10.14" and "Full (10.14)") or 
 														  (info.feedbkfmt == "16.16" and "High (16.16)") or "None"))
-							entry("Interval: " .. info.fmt.int)
+							entry("Interval: " .. info.fmt.int )
 						else
 							local i = 1
 							while info.fmts[i] do
@@ -428,7 +428,7 @@ function _restart(self)
 	self.timer = Timer(3000,
 					   function()
 						   log:info("rebooting...")
-						   os.execute("sudo shutdown -r now")
+						   os.execute("sudo reboot")
 					   end,
 					   true)
 	self.timer:start()
