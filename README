@@ -1,5 +1,10 @@
-Squeezplay applet to control sound devices (analogous to alsamixer)
+Hacked away bits of triodes EDO mod for squeezebox touch to work with squeezeplay
 
 Install: just copy to squeezplay/jive/share/applets directory
 
-Note: directory should be named AMixer, not Amixer
+Note: directory should be named EnhancedDigitalOutput
+Note : jivealsa is compiled for x86
+
+jive_alsa compiled from here:
+
+https://github.com/triode/squeezeplay
